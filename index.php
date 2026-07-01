@@ -32,6 +32,7 @@
         <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
         <link rel="manifest" href="favicon_io/site.webmanifest">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
         <link href="css/styles.css" rel="stylesheet" />
         <link href="assets/css/theme.css" rel="stylesheet" />
         <link href="assets/css/loader.css" rel="stylesheet" />
@@ -49,17 +50,17 @@
         <div id="globalLoaderOverlay" class="loader-overlay" style="display:none"></div>
         <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
             <a class="navbar-brand" href="index.php">Buku</a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0"></form>
+            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" role="search" aria-label="Search"></form>
             <!-- Navbar-->
-            <ul class="navbar-nav ml-auto ml-md-0">
+            <ul class="navbar-nav ms-auto ms-md-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="admin.php">Kelola Admin</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item logout-button" href="logout.php">Logout</a>
-                    </div>
+                    <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw" aria-hidden="true"></i><span class="visually-hidden">User menu</span></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="admin.php">Kelola Admin</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item logout-button" href="logout.php">Logout</a></li>
+                    </ul>
                 </li>
             </ul>
         </nav>
@@ -70,37 +71,37 @@
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Pengelolaan</div>
                             <a class="nav-link" href="index.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-warehouse"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-warehouse" aria-hidden="true"></i></div>
                                 Buku
                             </a>
                             <a class="nav-link" href="penerbit.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open" aria-hidden="true"></i></div>
                                 Penerbit
                             </a>
                             <a class="nav-link" href="pengirim.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-truck" aria-hidden="true"></i></div>
                                 Pengirim
                             </a>
                             <a class="nav-link" href="pembeli.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-user-friends"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-friends" aria-hidden="true"></i></div>
                                 Pembeli
                             </a>
                             <div class="sb-sidenav-menu-heading">Detail</div>
                             <a class="nav-link" href="detail_pembeli.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave" aria-hidden="true"></i></div>
                                 Detail Pembeli
                             </a>
                             <a class="nav-link" href="detail_pengirim.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave" aria-hidden="true"></i></div>
                                 Detail Pengirim
                             </a>
                             <div class="sb-sidenav-menu-heading">Laporan</div>
                             <a class="nav-link" href="pendapatan.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-money-bill-wave" aria-hidden="true"></i></div>
                                 Hasil Pendapatan
                             </a>
                             <a class="nav-link" href="grafik.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area" aria-hidden="true"></i></div>
                                 Grafik Laporan
                             </a>
                         </div>
@@ -113,7 +114,7 @@
                         <h1 class="mt-4">Stock Buku</h1>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <button type="button" class="button-17" role="button" data-toggle="modal" data-target="#myModal">Import</button>
+                                <button type="button" class="button-17" role="button" data-bs-toggle="modal" data-bs-target="#myModal">Import</button>
                                 <a href="export.php" class="button-17" role="button" id="exportButton">Export Data</a>
                                 <button class="button-17" onclick="toggleTheme()">Toggle Theme</button>
                             </div>
@@ -128,7 +129,7 @@
                                         $buku = htmlspecialchars($row['judulbuku']);
                                         echo "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">";
                                         echo "<strong>Maaf!</strong> Stok $buku telah habis.";
-                                        echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                                        echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
                                         echo "</div>";
                                     }
                                     $queryStokHabis->close();
@@ -179,7 +180,7 @@
                                                 <td><?= formatHargaIDR($harga); ?></td>
                                                 <td><?= $stock; ?></td>
                                                 <td>
-                                                    <button type="button" class="button-17" role="button" data-toggle="modal" data-target="#edit<?= $idb; ?>">Edit</button>
+                                                    <button type="button" class="button-17" role="button" data-bs-toggle="modal" data-bs-target="#edit<?= $idb; ?>">Edit</button>
                                                 </td>
                                             </tr>
 
@@ -189,19 +190,19 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="editLabel<?= $idb; ?>">Edit Buku</h5>
-                                                            <button type="button" class="button-17" role="button" data-dismiss="modal">&times;</button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <form method="post" enctype="multipart/form-data" action="api/update_buku.php">
+                                                        <form method="post" enctype="multipart/form-data" action="api/update_buku.php" class="needs-validation" novalidate>
                                                             <div class="modal-body">
-                                                                <input type="text" name="judulbuku" value="<?= $judulbuku; ?>" class="form-control" required>
+                                                                <input type="text" name="judulbuku" value="<?= $judulbuku; ?>" class="form-control" required aria-label="Judul Buku">
                                                                 <br>
-                                                                <input type="text" name="genre_buku" value="<?= $genre_buku; ?>" class="form-control" required>
+                                                                <input type="text" name="genre_buku" value="<?= $genre_buku; ?>" class="form-control" required aria-label="Genre Buku">
                                                                 <br>
-                                                                <input type="number" name="harga" value="<?= $harga; ?>" class="form-control" required>
+                                                                <input type="number" name="harga" value="<?= $harga; ?>" class="form-control" required aria-label="Harga">
                                                                 <br>
-                                                                <input type="number" name="stock" value="<?= $stock; ?>" class="form-control" min="0" required>
+                                                                <input type="number" name="stock" value="<?= $stock; ?>" class="form-control" min="0" required aria-label="Stock">
                                                                 <br>
-                                                                <input type="file" name="file" class="form-control">
+                                                                <input type="file" name="file" class="form-control" aria-label="Gambar Buku">
                                                                 <br>
                                                                 <input type="hidden" name="idb" value="<?= $idb; ?>">
                                                                 <input type="hidden" name="_csrf" value="<?= csrf_token(); ?>">
@@ -241,16 +242,16 @@
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="assets/js/theme.js"></script>
         <script src="assets/js/loader.js"></script>
+        <script src="assets/js/validation.js"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/datatables-demo.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const logoutButton = document.querySelector('.logout-button');
@@ -269,25 +270,41 @@
                         showLoader();
                     });
                 }
+
+                // Bootstrap 5: enable client-side form validation for modals
+                (function () {
+                  'use strict'
+                  var forms = document.querySelectorAll('.needs-validation')
+                  Array.prototype.slice.call(forms).forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                      if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        Swal.fire({icon:'error', title:'Form belum lengkap', text:'Isi semua field yang diperlukan.'});
+                      }
+                      form.classList.add('was-validated')
+                    }, false)
+                  })
+                })()
             });
         </script>
     </body>
         <!-- Modal for Import -->
-        <div class="modal fade" id="myModal">
+        <div class="modal fade" id="myModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
 
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Import data buku</h4>
-                        <button type="button" class="button-17" role="button" data-dismiss="modal">&times;</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- Modal Body -->
-                    <form method="post" enctype="multipart/form-data" action="api/import_buku.php">
+                    <form method="post" enctype="multipart/form-data" action="api/import_buku.php" class="needs-validation" novalidate>
                         <div class="modal-body">
                             <p>Silakan unggah file Excel untuk import data buku.</p>
-                            <input type="file" name="excel_file" accept=".xlsx, .xls" class="form-control" required>
+                            <input type="file" name="excel_file" accept=".xlsx, .xls" class="form-control" required aria-label="File Excel untuk Import">
                             <input type="hidden" name="_csrf" value="<?= csrf_token(); ?>">
                             <br>
                             <button type="submit" class="button-17" role="button" name="submit_import">Import</button>
