@@ -1,0 +1,56 @@
+/* assets/css/theme.css
+   Basic theme variables for light/dark modes and component refinements.
+*/
+:root {
+  --bg: #ffffff;
+  --fg: #111827;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --card: #ffffff;
+  --surface: #f8fafc;
+  --success: #10b981;
+  --danger: #ef4444;
+  --transition: 200ms ease;
+  --radius: 8px;
+  --shadow: 0 6px 18px rgba(15,23,42,0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --fg: #e6eef8;
+  --muted: #9aa4b2;
+  --primary: #60a5fa;
+  --card: #071028;
+  --surface: #071022;
+  --success: #34d399;
+  --danger: #f87171;
+  --shadow: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Inter", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background var(--transition), color var(--transition);
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.button-17 {
+  background: linear-gradient(90deg, var(--primary), #4f46e5);
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.button-17:hover { transform: translateY(-2px); }
+
+.badge-success { background: var(--success); color: #fff; padding: 6px 10px; border-radius: 6px; }
+.badge-danger { background: var(--danger); color: #fff; padding: 6px 10px; border-radius: 6px; }
