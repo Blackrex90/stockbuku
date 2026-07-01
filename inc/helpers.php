@@ -7,10 +7,15 @@ function secure_session_start(): void {
     if (session_status() === PHP_SESSION_NONE) {
         // Secure session cookie params
         $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+        // determine host without port for cookie domain (avoid including port)
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if (strpos($host, ':') !== false) {
+            $host = explode(':', $host)[0];
+        }
         session_set_cookie_params([
             'lifetime' => 0,
             'path' => '/',
-            'domain' => $_SERVER['HTTP_HOST'] ?? '',
+            'domain' => $host,
             'secure' => $secure,
             'httponly' => true,
             'samesite' => 'Lax'
@@ -40,23 +45,41 @@ function validate_csrf(string $token): bool {
 
 // Safe redirect
 function safe_redirect(string $url): void {
-    // sanitize url
+    // sanitize url but allow relative urls within the site
     $url = filter_var($url, FILTER_SANITIZE_URL);
+    // prevent open redirect: allow only relative urls or same-host absolute
+    if (strpos($url, 'http') === 0) {
+        $parsed = parse_url($url);
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if (!isset($parsed['host']) || $parsed['host'] !== $host) {
+            // default to index
+            $url = 'index.php';
+        }
+    }
     header('Location: ' . $url);
     exit();
 }
 
 // Input sanitization helpers
+// validate_input returns a trimmed string suitable for storage (NOT HTML-escaped)
 function validate_input(?string $data): ?string {
     if ($data === null) return null;
     $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    // strip control characters
+    $data = preg_replace('/[\x00-\x1F\x7F]/u', '', $data);
     return $data;
 }
 
+// helper to escape for HTML output
 function e(string $s): string {
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+}
+
+// For legacy convenience: sanitize for DB (prepared statements should be preferred)
+function sanitize_for_db(?string $s): ?string {
+    if ($s === null) return null;
+    // normalize whitespace and trim
+    return validate_input($s);
 }
 
 // Flash messages using session
@@ -140,4 +163,3 @@ function showErrorMessage(string $message, string $redirectURL = ''): void {
     });
     </script>";
 }
-
