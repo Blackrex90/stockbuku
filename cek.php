@@ -1,16 +1,30 @@
-<?php  
-    // Periksa apakah sesi sudah dimulai
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
+<?php
+require 'inc/helpers.php';
 
-    // Cek apakah pengguna sudah login
-    if (isset($_SESSION['log'])) {
-        // Pengguna sudah login, lanjutkan ke halaman selanjutnya
-    } else {
-        // Pengguna belum login, arahkan ke halaman login
-        header('location: login.php'); // Arahkan pengguna ke halaman login
-        exit(); // Hentikan eksekusi skrip setelah pengalihan
+// Start secure session and check authentication
+secure_session_start();
+
+// Session timeout (3600 seconds = 1 hour)
+$session_duration = 3600;
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $session_duration)) {
+    // Session expired
+    session_unset();
+    session_destroy();
+    safe_redirect('login.php?timeout=1');
+}
+
+$_SESSION['LAST_ACTIVITY'] = time();
+
+// Verify user is logged in
+if (empty($_SESSION['user_id'])) {
+    safe_redirect('login.php');
+}
+
+// Optional: role-based access helper can be used in pages
+function require_role(string $role): void {
+    if (empty($_SESSION['role']) || $_SESSION['role'] !== $role) {
+        safe_redirect('index.php');
     }
+}
+
 ?>
-
