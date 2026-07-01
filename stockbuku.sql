@@ -18,28 +18,25 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `stockbuku`
+-- Database: `stockbuku` (merged and cleaned)
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `buku`
+-- Struktur tabel `buku`
 --
-
-CREATE TABLE `buku` (
-  `idbuku` bigint(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS `buku` (
+  `idbuku` bigint(20) NOT NULL AUTO_INCREMENT,
   `judulbuku` varchar(255) NOT NULL,
   `genre_buku` varchar(100) DEFAULT NULL,
   `harga` decimal(30,2) NOT NULL,
   `stock` bigint(20) NOT NULL,
-  `image` varchar(255) DEFAULT NULL
+  `image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idbuku`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `buku`
---
-
+-- Dump data untuk tabel `buku`
 INSERT INTO `buku` (`idbuku`, `judulbuku`, `genre_buku`, `harga`, `stock`, `image`) VALUES
 (1, 'David Copperfield', 'Fiksi klasik', 85000.00, 9, '529cd71c859cf13313bb7c0a1d95d382.jpeg'),
 (2, 'About a Boy', 'Fiksi dewasa, komedi romantis', 58000.00, 10, 'f4f2bf9450d56ef92e084fd33d43f801.jpg'),
@@ -47,99 +44,21 @@ INSERT INTO `buku` (`idbuku`, `judulbuku`, `genre_buku`, `harga`, `stock`, `imag
 (4, 'Angela Ashes', 'Fiksi memoar, otobiografi', 75000.00, 14, 'ef866f4c6073835e418802de23a187ab.jpg'),
 (5, 'The Innocent Man', 'Non-fiksi, Kejahatan, Hukum', 75000.00, 0, '45391e14d02d993437bec48095719152.jpg'),
 (6, 'The King of Torts', 'Legal Thriller', 58000.00, 13, '08445422fb6cfadb09bdccf09fc26add.jpg'),
-(7, 'Planet Earth', 'Non-fiction, Children\'s Science', 58000.00, 4, 'c4d1bfdced955b71cf15aba2fda8ddd2.jpg');
+(7, 'Planet Earth', 'Non-fiction, Children''s Science', 58000.00, 4, 'c4d1bfdced955b71cf15aba2fda8ddd2.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `detil_pembeli`
+-- Struktur tabel `pembeli`
 --
-
-CREATE TABLE `detil_pembeli` (
-  `idpembeli` bigint(20) NOT NULL,
-  `idbuku` bigint(20) NOT NULL,
-  `qty` bigint(20) NOT NULL,
-  `harga` decimal(30,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `detil_pembeli`
---
-
-INSERT INTO `detil_pembeli` (`idpembeli`, `idbuku`, `qty`, `harga`) VALUES
-(1, 1, 1, 85000.00),
-(2, 2, 1, 58000.00),
-(3, 3, 1, 85000.00),
-(5, 7, 1, 58000.00),
-(6, 6, 1, 58000.00),
-(7, 6, 1, 58000.00),
-(8, 7, 1, 58000.00),
-(9, 7, 10, 580000.00),
-(11, 5, 10, 750000.00),
-(12, 5, 5, 375000.00);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `detil_pengirim`
---
-
-CREATE TABLE `detil_pengirim` (
-  `nobukti` varchar(50) NOT NULL,
-  `idbuku` bigint(20) NOT NULL,
-  `harga` decimal(30,2) NOT NULL,
-  `qty` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `detil_pengirim`
---
-
-INSERT INTO `detil_pengirim` (`nobukti`, `idbuku`, `harga`, `qty`) VALUES
-('UK092431', 1, 1100000.00, 10),
-('UK092432', 2, 1100000.00, 11),
-('UK092433', 3, 1100000.00, 12),
-('UK092434', 4, 1100000.00, 13),
-('UK092435', 5, 1100000.00, 14),
-('UK092436', 6, 1100000.00, 15),
-('UK092437', 7, 1100000.00, 16);
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `login`
---
-
-CREATE TABLE `login` (
-  `iduser` bigint(20) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `login`
---
-
-INSERT INTO `login` (`iduser`, `username`, `email`, `password`) VALUES
-(1, 'Admin', 'admin@gmail.com', '$2y$10$P0ICcTHnyGem1IFac7q9veAypHOO9Plduo1jkr5WJutvOKk5QcH16');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `pembeli`
---
-
-CREATE TABLE `pembeli` (
-  `idpembeli` bigint(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS `pembeli` (
+  `idpembeli` bigint(20) NOT NULL AUTO_INCREMENT,
   `nama_pembeli` varchar(255) NOT NULL,
-  `tanggal_beli` date NOT NULL
+  `tanggal_beli` date NOT NULL,
+  PRIMARY KEY (`idpembeli`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `pembeli`
---
-
+-- Dump data untuk tabel `pembeli`
 INSERT INTO `pembeli` (`idpembeli`, `nama_pembeli`, `tanggal_beli`) VALUES
 (1, 'X', '2025-01-21'),
 (2, 'A', '2025-01-22'),
@@ -161,20 +80,17 @@ INSERT INTO `pembeli` (`idpembeli`, `nama_pembeli`, `tanggal_beli`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `penerbit`
+-- Struktur tabel `penerbit`
 --
-
-CREATE TABLE `penerbit` (
-  `idpenerbit` bigint(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS `penerbit` (
+  `idpenerbit` bigint(20) NOT NULL AUTO_INCREMENT,
   `nama` varchar(255) NOT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `negara_asal` varchar(100) DEFAULT NULL
+  `negara_asal` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`idpenerbit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `penerbit`
---
-
+-- Dump data untuk tabel `penerbit`
 INSERT INTO `penerbit` (`idpenerbit`, `nama`, `email`, `negara_asal`) VALUES
 (1, 'X', 'x@c.co.id', 'United Kingdom'),
 (2, 'J', 'j@a.co.uk', 'United Kingdom'),
@@ -194,20 +110,18 @@ INSERT INTO `penerbit` (`idpenerbit`, `nama`, `email`, `negara_asal`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pengirim`
+-- Struktur tabel `pengirim`
 --
-
-CREATE TABLE `pengirim` (
+CREATE TABLE IF NOT EXISTS `pengirim` (
   `idpenerbit` bigint(20) NOT NULL,
   `tanggal_kirim` date NOT NULL,
   `nobukti` varchar(50) NOT NULL,
-  `nama` varchar(255) NOT NULL
+  `nama` varchar(255) NOT NULL,
+  PRIMARY KEY (`idpenerbit`),
+  KEY `nobukti` (`nobukti`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `pengirim`
---
-
+-- Dump data untuk tabel `pengirim`
 INSERT INTO `pengirim` (`idpenerbit`, `tanggal_kirim`, `nobukti`, `nama`) VALUES
 (1, '2025-01-09', 'UK092431', 'X'),
 (2, '2025-01-10', 'UK092432', 'J'),
@@ -220,129 +134,140 @@ INSERT INTO `pengirim` (`idpenerbit`, `tanggal_kirim`, `nobukti`, `nama`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `sessions`
+-- Struktur tabel `detil_pengirim`
 --
-
-CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
-  `data` text NOT NULL,
-  `last_access` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+CREATE TABLE IF NOT EXISTS `detil_pengirim` (
+  `nobukti` varchar(50) NOT NULL,
+  `idbuku` bigint(20) NOT NULL,
+  `harga` decimal(30,2) NOT NULL,
+  `qty` bigint(20) NOT NULL,
+  PRIMARY KEY (`nobukti`),
+  KEY `fk_detil_pengirim_idbuku` (`idbuku`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `sessions`
---
+-- Dump data untuk tabel `detil_pengirim`
+INSERT INTO `detil_pengirim` (`nobukti`, `idbuku`, `harga`, `qty`) VALUES
+('UK092431', 1, 1100000.00, 10),
+('UK092432', 2, 1100000.00, 11),
+('UK092433', 3, 1100000.00, 12),
+('UK092434', 4, 1100000.00, 13),
+('UK092435', 5, 1100000.00, 14),
+('UK092436', 6, 1100000.00, 15),
+('UK092437', 7, 1100000.00, 16);
 
+-- --------------------------------------------------------
+
+--
+-- Struktur tabel `detil_pembeli`
+-- Added created_at for reporting
+--
+CREATE TABLE IF NOT EXISTS `detil_pembeli` (
+  `idpembeli` bigint(20) NOT NULL,
+  `idbuku` bigint(20) NOT NULL,
+  `qty` bigint(20) NOT NULL,
+  `harga` decimal(30,2) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idpembeli`),
+  KEY `fk_detil_pembeli_idbuku` (`idbuku`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dump data untuk tabel `detil_pembeli`
+INSERT INTO `detil_pembeli` (`idpembeli`, `idbuku`, `qty`, `harga`, `created_at`) VALUES
+(1, 1, 1, 85000.00, CURRENT_TIMESTAMP),
+(2, 2, 1, 58000.00, CURRENT_TIMESTAMP),
+(3, 3, 1, 85000.00, CURRENT_TIMESTAMP),
+(5, 7, 1, 58000.00, CURRENT_TIMESTAMP),
+(6, 6, 1, 58000.00, CURRENT_TIMESTAMP),
+(7, 6, 1, 58000.00, CURRENT_TIMESTAMP),
+(8, 7, 1, 58000.00, CURRENT_TIMESTAMP),
+(9, 7, 10, 580000.00, CURRENT_TIMESTAMP),
+(11, 5, 10, 750000.00, CURRENT_TIMESTAMP),
+(12, 5, 5, 375000.00, CURRENT_TIMESTAMP);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur tabel `login`
+-- Ensure password column supports modern hashes
+--
+CREATE TABLE IF NOT EXISTS `login` (
+  `iduser` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`iduser`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Dump data untuk tabel `login`
+INSERT INTO `login` (`iduser`, `username`, `email`, `password`) VALUES
+(1, 'Admin', 'admin@gmail.com', '$2y$10$P0ICcTHnyGem1IFac7q9veAypHOO9Plduo1jkr5WJutvOKk5QcH16');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur tabel `sessions`
+-- (keberadaan sessions kept; no duplicate creation)
+--
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` varchar(255) NOT NULL,
+  `data` text NOT NULL,
+  `last_access` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- sample session data (kept from dump; may be truncated)
 INSERT INTO `sessions` (`id`, `data`, `last_access`) VALUES
-('0u9o0541486s6ld91gbblmroi5', 'LAST_ACTIVITY|i:1737655719;IP_ADDRESS|s:3:\"::1\";USER_AGENT|s:101:\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36\";log|b:1;email|s:15:\"admin@gmail.com\";username|s:5:\"Admin\";', '2025-01-23 18:08:39');
+('0u9o0541486s6ld91gbblmroi5', 'LAST_ACTIVITY|i:1737655719;IP_ADDRESS|s:3:"::1";USER_AGENT|s:101:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/...";', CURRENT_TIMESTAMP);
 
---
--- Indexes for dumped tables
---
+-- --------------------------------------------------------
 
---
--- Indeks untuk tabel `buku`
---
-ALTER TABLE `buku`
-  ADD PRIMARY KEY (`idbuku`);
+-- Migration additions (merged from stockbuku_migration.sql)
+-- Create loans table to support perpanjangan (extensions) and returns
+CREATE TABLE IF NOT EXISTS `loans` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `idbuku` INT NOT NULL,
+  `iduser` INT NULL,
+  `borrowed_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `due_date` DATETIME NOT NULL,
+  `returned_at` DATETIME NULL,
+  `fine_amount` INT DEFAULT 0,
+  `extended_times` INT DEFAULT 0,
+  CONSTRAINT `fk_loans_buku` FOREIGN KEY (`idbuku`) REFERENCES `buku`(`idbuku`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indeks untuk tabel `detil_pembeli`
---
-ALTER TABLE `detil_pembeli`
-  ADD PRIMARY KEY (`idpembeli`),
-  ADD KEY `fk_detil_pembeli_idbuku` (`idbuku`);
+-- Add index on detil_pembeli.created_at for reporting
+CREATE INDEX IF NOT EXISTS `idx_detil_pembeli_created_at` ON `detil_pembeli`(`created_at`);
 
---
--- Indeks untuk tabel `detil_pengirim`
---
-ALTER TABLE `detil_pengirim`
-  ADD PRIMARY KEY (`nobukti`),
-  ADD KEY `fk_detil_pengirim_idbuku` (`idbuku`);
+-- Add index for buku.judulbuku (prefix to avoid large index size)
+-- note: InnoDB/MariaDB may require a prefix for long TEXT; judulbuku is varchar(255)
+CREATE INDEX IF NOT EXISTS `idx_buku_judul` ON `buku`(`judulbuku`(255));
 
---
--- Indeks untuk tabel `login`
---
-ALTER TABLE `login`
-  ADD PRIMARY KEY (`iduser`),
-  ADD UNIQUE KEY `username` (`username`);
+-- Add index for pengirim.nobukti (prefix)
+CREATE INDEX IF NOT EXISTS `idx_pengirim_nobukti` ON `pengirim`(`nobukti`(100));
 
---
--- Indeks untuk tabel `pembeli`
---
-ALTER TABLE `pembeli`
-  ADD PRIMARY KEY (`idpembeli`);
+-- --------------------------------------------------------
 
---
--- Indeks untuk tabel `penerbit`
---
-ALTER TABLE `penerbit`
-  ADD PRIMARY KEY (`idpenerbit`);
-
---
--- Indeks untuk tabel `pengirim`
---
-ALTER TABLE `pengirim`
-  ADD PRIMARY KEY (`idpenerbit`),
-  ADD KEY `nobukti` (`nobukti`);
-
---
--- Indeks untuk tabel `sessions`
---
-ALTER TABLE `sessions`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT untuk tabel yang dibuang
---
-
---
--- AUTO_INCREMENT untuk tabel `buku`
---
-ALTER TABLE `buku`
-  MODIFY `idbuku` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT untuk tabel `login`
---
-ALTER TABLE `login`
-  MODIFY `iduser` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT untuk tabel `pembeli`
---
-ALTER TABLE `pembeli`
-  MODIFY `idpembeli` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT untuk tabel `penerbit`
---
-ALTER TABLE `penerbit`
-  MODIFY `idpenerbit` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `detil_pembeli`
---
+-- Foreign key constraints (ensure referential integrity)
 ALTER TABLE `detil_pembeli`
   ADD CONSTRAINT `fk_detil_pembeli_idbuku` FOREIGN KEY (`idbuku`) REFERENCES `buku` (`idbuku`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_detil_pembeli_idpembeli` FOREIGN KEY (`idpembeli`) REFERENCES `pembeli` (`idpembeli`) ON UPDATE CASCADE;
 
---
--- Ketidakleluasaan untuk tabel `detil_pengirim`
---
 ALTER TABLE `detil_pengirim`
   ADD CONSTRAINT `fk_detil_pengirim_idbuku` FOREIGN KEY (`idbuku`) REFERENCES `buku` (`idbuku`) ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_detil_pengirim_nobukti` FOREIGN KEY (`nobukti`) REFERENCES `pengirim` (`nobukti`) ON UPDATE CASCADE;
 
---
--- Ketidakleluasaan untuk tabel `pengirim`
---
 ALTER TABLE `pengirim`
   ADD CONSTRAINT `pengirim_ibfk_1` FOREIGN KEY (`idpenerbit`) REFERENCES `penerbit` (`idpenerbit`);
+
+-- --------------------------------------------------------
+
+-- Ensure AUTO_INCREMENT values are set sensibly
+ALTER TABLE `buku`   AUTO_INCREMENT = 8;
+ALTER TABLE `login`  AUTO_INCREMENT = 2;
+ALTER TABLE `pembeli` AUTO_INCREMENT = 17;
+ALTER TABLE `penerbit` AUTO_INCREMENT = 15;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
