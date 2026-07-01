@@ -1,8 +1,9 @@
 <?php
+    require 'inc/helpers.php';
     require 'function.php';
     require 'cek.php';
 
-    // Aktifkan tampilan error dan laporan kesalahan PHP
+    // Aktifkan tampilan error dan laporan kesalahan PHP (development only)
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
@@ -25,79 +26,28 @@
         <meta property="og:image" content="favicon_io/favicon.ico" />
         <meta property="og:url" content="https://stockbuku.com/detail_pengirim.php" />
         <meta name="twitter:card" content="summary_large_image" />
-        <title>Detail Pengirim</title>
+        <title>Stock Buku</title>
         <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
         <link rel="manifest" href="favicon_io/site.webmanifest">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="assets/css/theme.css" rel="stylesheet" />
+        <link href="assets/css/loader.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <style>
-            .zoomable {
-                width: 50px;
-            }
-            .zoomable:hover {
-                transform: scale(2.5);
-                transition: 0.3s ease;
-            }
-            a {
-                text-decoration: none;
-                color: black;
-            }
-
-            .loader {
-                display: none; /* Initially hidden */
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                position: fixed;
-                width: 100%;
-                background-color: rgba(255, 255, 255, 0.8);
-                z-index: 9999;
-            }
-
-            .loader-dot {
-                width: 15px;
-                height: 15px;
-                margin: 0 5px;
-                background-color: #333;
-                border-radius: 50%;
-                animation: loader-animation 1s infinite;
-            }
-
-            .loader-dot:nth-child(1) {
-                animation-delay: 0s;
-            }
-
-            .loader-dot:nth-child(2) {
-                animation-delay: 0.2s;
-            }
-
-            .loader-dot:nth-child(3) {
-                animation-delay: 0.4s;
-            }
-
-            @keyframes loader-animation {
-                0%, 80%, 100% {
-                    transform: scale(0);
-                }
-                40% {
-                    transform: scale(1);
-                }
-            }
+            .zoomable { width: 50px; }
+            .zoomable:hover { transform: scale(2.5); transition: 0.3s ease; }
+            a { text-decoration: none; color: inherit; }
         </style>
     </head>
     <body class="sb-nav-fixed">
-        <div class="loader">
-            <div class="loader-dot"></div>
-            <div class="loader-dot"></div>
-            <div class="loader-dot"></div>
-        </div>
-        <nav class="sb-topnav navbar navbar-expand navbar-ligth bg-ligth">
+        <div id="globalLoaderOverlay" class="loader-overlay" style="display:none"></div>
+        <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
             <a class="navbar-brand" href="index.php">Buku</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0"></form>
@@ -115,7 +65,7 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion"> <!-- Updated to light theme -->
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Pengelolaan</div>
@@ -128,11 +78,11 @@
                                 Penerbit
                             </a>
                             <a class="nav-link" href="pengirim.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
                                 Pengirim
                             </a>
                             <a class="nav-link" href="pembeli.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-friends"></i></div>
                                 Pembeli
                             </a>
                             <div class="sb-sidenav-menu-heading">Detail</div>
@@ -163,10 +113,9 @@
                         <h1 class="mt-4">Stock Buku</h1>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <button type="button" class="button-17" role="button" data-toggle="modal" data-target="#myModal">
-                                    Import
-                                </button>
-                                <a href="export.php" class="button-17" role="button" id="exportButton" >Export Data</a>
+                                <button type="button" class="button-17" role="button" data-toggle="modal" data-target="#myModal">Import</button>
+                                <a href="export.php" class="button-17" role="button" id="exportButton">Export Data</a>
+                                <button class="button-17" onclick="toggleTheme()">Toggle Theme</button>
                             </div>
                             <div class="card-body">
                                 <?php
@@ -177,14 +126,10 @@
 
                                     while ($row = $resultStokHabis->fetch_assoc()) {
                                         $buku = htmlspecialchars($row['judulbuku']);
-                                        echo <<<HTML
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <strong>Maaf!</strong> Stok $buku telah habis.
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        HTML;
+                                        echo "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">";
+                                        echo "<strong>Maaf!</strong> Stok $buku telah habis.";
+                                        echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                                        echo "</div>";
                                     }
                                     $queryStokHabis->close();
                                 ?>
@@ -220,10 +165,8 @@
                                             // Validasi dan tampilkan gambar
                                             $imagePath = 'images/' . $gambar;
                                             if ($gambar == null || !file_exists($imagePath)) {
-                                                // Menampilkan gambar default jika gambar tidak ada
                                                 $img = '<img src="images/default.png" class="zoomable" alt="No Photo">';
                                             } else {
-                                                // Menampilkan gambar buku jika ada
                                                 $img = '<img src="' . $imagePath . '" class="zoomable" alt="Gambar Buku">';
                                             }
                                             ?>
@@ -236,10 +179,7 @@
                                                 <td><?= formatHargaIDR($harga); ?></td>
                                                 <td><?= $stock; ?></td>
                                                 <td>
-                                                    <!-- Tombol untuk Edit Buku -->
-                                                    <button type="button" class="button-17" role="button" data-toggle="modal" data-target="#edit<?= $idb; ?>">
-                                                        Edit
-                                                    </button>
+                                                    <button type="button" class="button-17" role="button" data-toggle="modal" data-target="#edit<?= $idb; ?>">Edit</button>
                                                 </td>
                                             </tr>
 
@@ -251,7 +191,7 @@
                                                             <h5 class="modal-title" id="editLabel<?= $idb; ?>">Edit Buku</h5>
                                                             <button type="button" class="button-17" role="button" data-dismiss="modal">&times;</button>
                                                         </div>
-                                                        <form method="post" enctype="multipart/form-data">
+                                                        <form method="post" enctype="multipart/form-data" action="api/update_buku.php">
                                                             <div class="modal-body">
                                                                 <input type="text" name="judulbuku" value="<?= $judulbuku; ?>" class="form-control" required>
                                                                 <br>
@@ -264,6 +204,7 @@
                                                                 <input type="file" name="file" class="form-control">
                                                                 <br>
                                                                 <input type="hidden" name="idb" value="<?= $idb; ?>">
+                                                                <input type="hidden" name="_csrf" value="<?= csrf_token(); ?>">
                                                                 <button type="submit" class="button-17" role="button" name="updatebuku">Edit</button>
                                                             </div>
                                                         </form>
@@ -278,7 +219,7 @@
                         </div>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto"> <!-- Updated to light theme -->
+                <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted" id="copyright"></div>
@@ -301,6 +242,8 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="assets/js/theme.js"></script>
+        <script src="assets/js/loader.js"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="assets/demo/chart-area-demo.js"></script>
@@ -311,17 +254,19 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const logoutButton = document.querySelector('.logout-button');
-                const loader = document.querySelector('.loader');
+                const loader = document.getElementById('globalLoaderOverlay');
+                const exportButton = document.getElementById('exportButton');
 
                 if (logoutButton) {
-                    logoutButton.addEventListener('click', function() {
-                        loader.style.display = 'flex';
+                    logoutButton.addEventListener('click', function(e) {
+                        // Show loader to indicate logout in progress
+                        showLoader();
                     });
                 }
 
                 if (exportButton) {
                     exportButton.addEventListener('click', function() {
-                        loader.style.display = 'flex';
+                        showLoader();
                     });
                 }
             });
@@ -335,14 +280,15 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title">Import data buku</h4>
-                        <button type="button" class="button-17" role="button" data-dismiss="modal">&times;</button>            
+                        <button type="button" class="button-17" role="button" data-dismiss="modal">&times;</button>
                     </div>
-                    
+
                     <!-- Modal Body -->
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" action="api/import_buku.php">
                         <div class="modal-body">
                             <p>Silakan unggah file Excel untuk import data buku.</p>
                             <input type="file" name="excel_file" accept=".xlsx, .xls" class="form-control" required>
+                            <input type="hidden" name="_csrf" value="<?= csrf_token(); ?>">
                             <br>
                             <button type="submit" class="button-17" role="button" name="submit_import">Import</button>
                         </div>
