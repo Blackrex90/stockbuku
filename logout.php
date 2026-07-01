@@ -1,37 +1,29 @@
-<?php  
-	require 'function.php';
+<?php
+// logout.php (refactored)
+require 'inc/helpers.php';
 
-	function logoutAndClearSession() {
-		// Mulai sesi jika belum dimulai
-		if (session_status() === PHP_SESSION_NONE) {
-			session_start();
-		}
+// Start secure session
+secure_session_start();
 
-		// Hapus semua variabel sesi
-		$_SESSION = [];
+// Clear session data
+$_SESSION = [];
 
-		// Hapus cookie sesi jika ada
-		if (ini_get("session.use_cookies")) {
-			$params = session_get_cookie_params();
-			setcookie(
-				session_name(),
-				'',
-				time() - 42000,
-				$params["path"],
-				$params["domain"],
-				$params["secure"],
-				$params["httponly"]
-			);
-		}
+// Destroy session cookie if used
+if (ini_get('session.use_cookies')) {
+    $params = session_get_cookie_params();
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params['path'] ?? '/',
+        $params['domain'] ?? '',
+        $params['secure'] ?? false,
+        $params['httponly'] ?? true
+    );
+}
 
-		// Hapus sesi di server
-		session_destroy();
-	}
+// Destroy the session server side
+session_destroy();
 
-	// Panggil fungsi untuk logout dan hapus sesi
-	logoutAndClearSession();
-
-	// Redirect ke halaman login dengan pesan logout
-	header('Location: login.php');
-	exit();
-?>
+// Redirect to login with a query flag
+safe_redirect('login.php?logged_out=1');

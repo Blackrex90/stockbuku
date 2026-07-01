@@ -1,0 +1,18 @@
+/* assets/css/loader.css
+   Uiverse-inspired loader (simple, adaptable colors)
+*/
+.loader-overlay {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 180ms ease;
+}
+.loader-overlay.show { opacity: 1; visibility: visible; }
+
+.loader-uiverse {
+  width: 100px; height: 100px; display: grid; place-items: center;
+}
+
+.loader-uiverse .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--primary); animation: pop 1s infinite; }
+.loader-uiverse .dot:nth-child(2) { animation-delay: 0.15s; }
+.loader-uiverse .dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes pop { 0% { transform: scale(0.6); opacity: .6 } 50% { transform: scale(1); opacity: 1 } 100% { transform: scale(0.6); opacity: .6 } }
